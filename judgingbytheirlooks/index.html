@@ -139,8 +139,8 @@
 <!-- Info 資訊框 -->
 <div id="info-dialogue-box">
     <h3>遊戲規則</h3>
-    <p>玩家在看完題目後，所有人倒數321後，同時指向名片上的其中一個角色圖示上，如果所有人都選則了同一個角色則獲得1分。十題結束後玩家可以知道大家的默契程度</p>
-    <p>點擊任意處關閉資訊框。</p>
+    <p>這是個合作的遊戲，所有玩家在看完題目後，在心中給予一個最適合這個答案的角色。準備好後，所有人一起倒數「321」並同時指向名片上的其中一個角色圖示上，如果所有人都選則了同一個角色則獲得1分。十題結束後玩家可以知道大家的默契程度</p>
+    <p>點擊資訊按鈕關閉。</p>
 </div>
 <div id="thanksforplaying-box">
     <h4>"歡迎點擊左下角LOGO，進一步了解九星連珠遊戲！"</h4>
@@ -235,18 +235,23 @@
     }
     // 顯示資訊框
     function showInfo() {
+        if (infoDialogueBox.style.display === 'block') {
+        infoDialogueBox.style.display = 'none';
+    } else {
         infoDialogueBox.style.display = 'block';
+    }
     }
     function showThanks() {
         thanksforplaying.style.display = 'block';
     }
 
-    // 點擊任意處關閉資訊框
+
     window.addEventListener('touchstart', function(event) {
     if (event.target !== infoDialogueBox && event.target !== infoIcon) {
         infoDialogueBox.style.display = 'none';
     }
 });
+
 </script>
 
 </body>
