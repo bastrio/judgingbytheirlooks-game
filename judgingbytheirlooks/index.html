@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文字遊戲</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-image: url(image/questionbackground.png); /* 背景圖片 */
+        background-size: cover;
+        color: #091d40  ;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: relative; /* 添加相對定位，以便定位info圖標 */
+    }
+    #start-container img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    #game-background-container img{
+        max-width: 100%;
+        max-height: 100%;
+    }
+    #game-container {
+        display: none;
+        width: 280px; /* 請根據您的對話框大小調整 */
+        height: 252.461px; /* 請根據您的對話框大小調整 */
+        background-image: url(image/dialogue.png); /* 對話框的圖像 */
+        background-size: cover;
+        text-align: center;
+        padding: 10px;
+        position: absolute;
+        top: 10%;
+        animation: appearAnimation 0.5s ease forwards; /* 將動畫應用到對話框 */
+    }
+    #game-container h2 {
+        position: absolute;
+        width: 280px; /* 請根據您的對話框大小調整 */
+        height: 252.461px; /* 請根據您的對話框大小調整 */
+        top: 17%; /* 將文字向上移動 20px */
+        transform: translatey(-0%);
+        display: flex;
+        justify-content: center; /* 水平置中 */
+        text-align: center;
+        white-space: normal; /* 文字允許換行 */
+    }
+    .button-container {
+        position: absolute;
+        top: 75%;
+        left: 60%;
+    }
+    .button-container button {
+        width: 120px; /* 調整按鈕的寬度 */
+        height: 40px;
+        font-size: 16px;
+        background-color: #3498db;
+        border: none;
+        border-radius: 5px;
+        color: #ffffff;
+        cursor: pointer;
+        margin-bottom: 20px; /* 調整按鈕之間的間距 */
+    }
+    .button-container a {
+        text-decoration: none; /* 移除底線 */
+        color: #ffffff;
+    }
+    #info-icon {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        cursor: pointer;
+        width: 40px;
+    }
+    #info-dialogue-box {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        max-width: 400px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        opacity: 0.9;
+    }
+    #logo {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        width: 60px;
+    }
+    #thanksforplaying-box {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        max-width: 400px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    @keyframes appearAnimation {
+        0% { transform: scale(0.5); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+</style>
+</head>
+<body>
+
+<div id="start-container">
+    <img src="image/gamecover.png" alt="點擊任意處開始遊戲">
+</div>
+
+<div id="game-container">
+    <h2 id="text"></h2>
+    <div class="button-container">
+        <button id="play-again-btn">下一題</button>
+    </div>
+</div>
+
+<!-- Logo 圖標 -->
+<a href="https://www.facebook.com/profile.php?id=61554795866126&locale=zh_TW">
+    <img id="logo" src="image/logo.png" alt="Logo" style="width: 75 px; height: 93.771 px;">
+</a>
+
+<!-- Info 圖標 -->
+<img id="info-icon" src="image/info.png" alt="Info" style="width: 35px; height: 35px;" onclick="showInfo()">
+
+<!-- Info 資訊框 -->
+<div id="info-dialogue-box">
+    <h3>遊戲規則</h3>
+    <p>玩家在看完題目後，所有人倒數321後，同時指向名片上的其中一個角色圖示上，如果所有人都選則了同一個角色則獲得1分。十題結束後玩家可以知道大家的默契程度</p>
+    <p>點擊任意處關閉資訊框。</p>
+</div>
+<div id="thanksforplaying-box">
+    <h4>"歡迎點擊左下角LOGO，進一步了解九星連珠遊戲！"</h4>
+</div>
+
+<script>
+    const startContainer = document.getElementById('start-container');
+    const gameContainer = document.getElementById('game-container');
+    const textElement = document.getElementById('text');
+    const playAgainButton = document.getElementById('play-again-btn');
+    const infoIcon = document.getElementById('info-icon');
+    const infoDialogueBox = document.getElementById('info-dialogue-box');
+    const thanksforplaying =  document.getElementById('thanksforplaying-box');
+    const textsGroup1 = [
+        "誰的頭最大?",
+        "誰的小孩最多?",
+        "誰的人生最幸福?",
+        "誰煮的飯最好吃?",
+        "誰的骨頭最多?",
+        "誰的情人最多?",
+        "誰的繁殖力最強?",
+        "誰的手速最快?",
+        "誰最愛鞭打奴隸?",
+        "誰的年齡最大?",
+    ];
+    const textsGroup2 = [
+        "誰最會下圍棋?",
+        "誰的國文最好?",
+        "誰的朋友最多?",
+        "誰旅遊最多地方?",
+        "誰在百米賽跑最後一名?",
+        "誰最有網感?",
+        "誰的癖好最特別?",
+        "誰最適合打籃球?",
+        "誰復活過最多次?",
+        "誰的睡眠時間最長?"
+    ];
+    const textsGroup3 = [
+        "誰最愛洗澡?",
+        "誰的體位最重?",
+        "誰的媽媽最愛他?",
+        "誰最會吟詩作對?",
+        "誰最了解自己?",
+        "誰剛剛偷了我的錢包?",
+        "誰曾經去過異世界?",
+        "誰最懂得經營酒吧?",
+        "誰最不懂得看臉色?",
+        "誰最會給予情緒價值?"
+    ];
+
+    // 存儲所有文字組合的陣列
+    const allTextsGroups = [textsGroup1, textsGroup2, textsGroup3];
+
+    let selectedGroup = [];
+
+    startContainer.addEventListener('click', () => {
+        startContainer.style.display = 'none';
+        gameContainer.style.display = 'block';
+        selectRandomGroup();
+
+        showRandomText();
+        gameContainer.style.animation = 'appearAnimation 0.5s ease forwards'; // 添加動畫效果
+    });
+
+    playAgainButton.addEventListener('click', () => {
+        showRandomText();
+        gameContainer.style.animation = 'appearAnimation 0.5s ease forwards'; // 添加動畫效果
+    });
+    function selectRandomGroup() {
+        // 隨機選擇一個文字組合
+        const randomGroupIndex = Math.floor(Math.random() * allTextsGroups.length);
+        selectedGroup = allTextsGroups[randomGroupIndex];
+    }
+
+    function showRandomText() {
+        if (selectedGroup.length === 0) {
+            // 若題目用完，關閉對話框並彈出視窗
+            gameContainer.style.display = 'none';
+            showThanks();
+            return;
+        }
+
+        // 從所選組合中隨機選擇一個題目
+        const randomTextIndex = Math.floor(Math.random() * selectedGroup.length);
+        const selectedText = selectedGroup[randomTextIndex];
+
+        // 顯示所選的題目
+        textElement.textContent = selectedText;
+
+        // 從所選組合中刪除已選的題目
+        selectedGroup.splice(randomTextIndex, 1);
+    }
+    // 顯示資訊框
+    function showInfo() {
+        infoDialogueBox.style.display = 'block';
+    }
+    function showThanks() {
+        thanksforplaying.style.display = 'block';
+    }
+
+    // 點擊任意處關閉資訊框
+    window.onclick = function(event) {
+        if (event.target !== infoDialogueBox && event.target !== infoIcon) {
+            infoDialogueBox.style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>
