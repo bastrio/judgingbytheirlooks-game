@@ -52,10 +52,11 @@
     }
     .button-container {
         position: absolute;
-        top: 75%;
+        top: 40%;
         left: 60%;
     }
     .button-container button {
+        display: none;
         width: 120px; /* 調整按鈕的寬度 */
         height: 40px;
         font-size: 16px;
@@ -144,12 +145,12 @@
 
 <div id="game-container">
     <h2 id="text"></h2>
-    <div class="button-container">
-        <button id="success-btn">成功</button>
-        <button id="fail-btn">失敗</button>
-    </div>
-</div>
 
+</div>
+<div class="button-container">
+    <button id="success-btn">成功</button>
+    <button id="fail-btn">失敗</button>
+</div>
 <a id="link" href="https://docs.google.com/document/d/1ShCMQX1A1q_D3JU6flYjKQup9KcaTWO7Jvvvtka-k8E">
     <img src="image/link_icon.png" alt="Link Icon">
 </a>
@@ -165,7 +166,7 @@
 <div id="info-dialogue-box">
     <h3>以貌取人名片版規則</h3>
     <p>這是名片遊戲的規則，若想了解實體遊戲規則，請點選右上角完整說明書</p>
-    <p>這是個合作的遊戲，所有玩家在看完題目後，在心中想好一個最適合這個答案的角色。所有人準備好後，一起倒數「321」並同時指向名片上的其中一個角色圖示上，如果所有人都選擇了同一個角色則獲得1分。十題結束後玩家可以知道大家的默契程度。</p>
+    <p>這是個合作的遊戲，所有玩家在看完題目後，在心中想好一個最適合這個答案的角色。所有人準備好後，一起倒數「321」並同時指向名片上的其中一個角色圖示上，如果所有人都選擇了同一個角色則獲得1分。五題結束後玩家可以知道大家的默契程度。</p>
     <p></p>
     <p>點擊畫面任意處關閉視窗</p>
     <p>如果想再次看到規則請點擊右下角info圖標</p>
@@ -183,6 +184,7 @@
     const gameContainer = document.getElementById('game-container');
     const textElement = document.getElementById('text');
     const successButton = document.getElementById('success-btn');
+    const Buttons = document.getElementById('button-container');
     const failButton = document.getElementById('fail-btn');
     const infoIcon = document.getElementById('info-icon');
     const infoDialogueBox = document.getElementById('info-dialogue-box');
@@ -265,9 +267,11 @@
         startContainer.style.display = 'none';
         gameContainer.style.display = 'block';
         selectRandomGroup();
-
         showRandomText();
         gameContainer.style.animation = 'appearAnimation 0.5s ease forwards'; // 添加動畫效果
+        successButton.style.display = 'block';
+        failButton.style.display = 'block';
+
     });
 
     successButton.addEventListener('click', () => {
@@ -303,8 +307,15 @@
         const selectedText = selectedGroup[randomTextIndex];
 
         // 顯示所選的題目
-        textElement.textContent = selectedText;
+        textElement.textContent = '';
+        gameContainer.style.display = 'none'; // 隱藏對話框
+        void gameContainer.offsetWidth; // 觸發重繪，使動畫能夠再次播放
+        gameContainer.style.display = 'block'; // 顯示對話框
 
+    // 在對話框出現動畫結束後開始打字
+    setTimeout(() => {
+        typeText(selectedText, textElement);
+    }, 500); // 根據動畫時長設置延遲時間
         // 從所選組合中刪除已選的題目
         selectedGroup.splice(randomTextIndex, 1);
     }
@@ -337,6 +348,12 @@
         }
 
         endGameTextElement.textContent = `你們獲得了 ${score} 分。${endgametext}`;
+    }
+    function typeText(text, element, index = 0) {
+        if (index < text.length) {
+            element.textContent += text.charAt(index);
+            setTimeout(() => typeText(text, element, index + 1), 50); // 調整打字速度
+        }
     }
 
     window.addEventListener('touchstart', function(event) {
